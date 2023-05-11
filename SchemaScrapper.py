@@ -1,7 +1,6 @@
 import streamlit as st
 st.set_page_config(page_title="Schema Scrapper", layout="wide")
 
-from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 import json
 
