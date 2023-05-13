@@ -12,6 +12,9 @@ from w3lib.html import get_base_url
 
 from streamlit_ace import st_ace, KEYBINDINGS, LANGUAGES, THEMES
 
+if 'counter' not in st.session_state:
+    st.session_state['counter'] = 0
+
 def scrape(url: str):
     """Parse structured data from a target page."""
     html = get_html(url)
@@ -87,24 +90,31 @@ def main():
             replace_txt=st.text_input('Replace With')
             if st.button('Replace'):
                 st.session_state['metadata']=replace_values(metadata,search_txt,replace_txt)
+                st.session_state['counter'] += 1
 
         with c2:
             st.subheader("Structured Data")
             # st.json(json.dumps(st.session_state['metadata']))
-            st.session_state['metadata'] = st_ace(
-                json.dumps(st.session_state['metadata'],indent=4),
-                language="json",
-                theme="chaos",
-                keybinding="vscode",
-                font_size=14,
-                tab_size=4,
-                show_gutter=True,
-                wrap=True,
-                auto_update=False,
-                readonly=False,
-                min_lines=45,
-                key="ace",
+            
+            
+            metadata = json.dumps(st.session_state['metadata'],indent=4)
+            str_as_json_changes = st_ace(
+                    metadata,
+                    language="json",
+                    theme="chaos",
+                    keybinding="vscode",
+                    font_size=14,
+                    tab_size=4,
+                    show_gutter=True,
+                    wrap=True,
+                    auto_update=False,
+                    readonly=False,
+                    min_lines=45,
+                    key=f"ace-editor-{st.session_state['counter']}",
             )
+            
+
+            # st.session_state['metadata']=json.loads(str_as_json_changes)
         
 
 
